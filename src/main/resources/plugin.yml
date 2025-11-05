@@ -1,0 +1,11 @@
+name: VineriumMarriages
+version: '1.0'
+author: SaintQd
+main: org.saintqd.vineriummarriages.VineriumMarriages
+api-version: 1.21.4
+depend: [VineriumLib]
+softdepend: [PlaceholderAPI,Vault]
+permissions:
+  vineriummarriages.admin:
+    description: Access to admin commands.
+    default: op

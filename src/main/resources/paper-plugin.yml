@@ -1,0 +1,39 @@
+name: VineriumMarriages
+version: '1.0'
+author: SaintQd
+main: org.saintqd.vineriummarriages.VineriumMarriages
+description: VineriumMarriages Plugin
+api-version: '1.21.4'
+dependencies:
+  server:
+    VineriumLib:
+      load: BEFORE
+      required: true
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+    Vault:
+      load: BEFORE
+      required: false
+permissions:
+  vineriummarriages.admin:
+    description: Access to admin commands.
+    default: op
+  vineriummarriages.offer:
+    description: Возможность совершать предложения брака.
+    default: op
+  vineriummarriages.divorce:
+    description: Возможность расторгать брак.
+    default: true
+  vineriummarriages.ender:
+    description: Возможность открывать эндер-сундук партнёра.
+    default: op
+  vineriummarriages.tp:
+    description: Возможность телепортироваться к партнёру.
+    default: op
+  vineriummarriages.kiss:
+    description: Возможность телепортироваться к партнёру.
+    default: true
+  vineriummarriages.woohoo:
+    description: Возможность уединяться с партнёром.
+    default: true
