@@ -1,10 +1,9 @@
 package org.saintqd.vineriummarriages;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.saintqd.vineriumlib.VineriumLib;
+import org.saintqd.vineriumlib.utils.ResourceUtils;
 import org.saintqd.vineriumlib.utils.VinUtils;
 import org.saintqd.vineriummarriages.commands.MarryCommandsManager;
 import org.saintqd.vineriummarriages.listeners.PlayerListener;
@@ -13,12 +12,7 @@ import org.saintqd.vineriummarriages.placeholders.VinMarriagePlaceholders;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
-import java.util.List;
 
 public class VineriumMarriages extends JavaPlugin {
 
@@ -33,10 +27,13 @@ public class VineriumMarriages extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        try {
+            ResourceUtils.fetchAllResources(this,getFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         this.marriedPlayersManager = new MarriedPlayersManager();
-
-        setupDefaultConfig();
 
         loadData();
 
@@ -67,21 +64,9 @@ public class VineriumMarriages extends JavaPlugin {
         reloadConfig();
 
         String selectedLang = getConfig().getString("Marriages.Language");
-        if (selectedLang != null) {
-            File langFile = new File(plugin.getDataFolder().getPath() + File.separator + "lang" + File.separator + selectedLang + ".yml");
-            if (!langFile.exists() && langFile.mkdirs()) {
-                InputStream langStream = VineriumMarriages.class.getResourceAsStream("/lang/"+selectedLang+".yml");
-                if (langStream != null) {
-                    try {
-                        Files.copy(langStream, Path.of(getDataFolder().getPath() + File.separator + "lang" + File.separator + selectedLang + ".yml"), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-            HashMap<String,String> langLines = VineriumLib.inst().getLangManager().loadLanguageFile(this,"lang" + File.separator + selectedLang + ".yml");
-            VineriumLib.inst().getLangManager().registerLangLines(this,langLines);
-        }
+        HashMap<String,String> langLines = VineriumLib.inst().getLangManager().loadLanguageFile(
+                plugin.getDataFolder().getPath() + File.separator + "lang" + File.separator + selectedLang + ".yml");
+        VineriumLib.inst().getLangManager().registerLangLines(this,langLines);
 
         long startTime = System.currentTimeMillis();
         long prevTime = startTime;
@@ -102,28 +87,6 @@ public class VineriumMarriages extends JavaPlugin {
 
     public static VineriumMarriages inst() {
         return plugin;
-    }
-
-    private void setupDefaultConfig() {
-
-        FileConfiguration config = this.getConfig();
-
-        config.addDefault("Marriages.Language","ru_ru");
-        config.addDefault("Marriages.AcceptInviteTime",2400L);
-        config.addDefault("Marriages.OfferMaxDistance",10.0);
-        config.addDefault("Marriages.KissMaxDistance",3);
-        config.addDefault("Marriages.KissHealAmount",8);
-        config.addDefault("Marriages.KissCooldown",1200L);
-        config.addDefault("Marriages.WoohooMaxDistance",5);
-        config.addDefault("Marriages.WoohooHungerCost",10);
-        config.addDefault("Marriages.WoohooBedNeeded",true);
-        config.addDefault("Marriages.WoohooLength",200L);
-        config.addDefault("Marriages.WoohooBuffs",List.of("SPEED,0,1200","RESISTANCE,0,2400"));
-        config.addDefault("Marriages.WoohooCooldown",6000L);
-        config.addDefault("Marriages.WoohooSounds",List.of("entity.villager.trade","entity.villager.celebrate","entity.villager.no"));
-
-        config.options().copyDefaults(true);
-        this.saveConfig();
     }
 
     public MarriedPlayersManager getMarriedPlayersManager() {

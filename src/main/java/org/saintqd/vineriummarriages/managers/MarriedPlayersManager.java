@@ -14,9 +14,7 @@ import org.saintqd.vineriummarriages.VineriumMarriages;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class MarriedPlayersManager {
 
@@ -82,6 +80,7 @@ public class MarriedPlayersManager {
             return;
         for (String playerName : marriedPlayersConfig.getKeys(false)) {
             marriedPlayerNames.put(playerName,marriedPlayersConfig.getString(playerName));
+            marriedPlayerNames.put(marriedPlayersConfig.getString(playerName),playerName);
         }
     }
 
@@ -89,11 +88,16 @@ public class MarriedPlayersManager {
         File marriedPlayerNamesFile = new File(plugin.getDataFolder().getPath() + File.separator + "MarriedPlayerNames.yml");
         YamlConfiguration marriedPlayersYaml = YamlConfiguration.loadConfiguration(marriedPlayerNamesFile);
         marriedPlayersYaml.set("MarriedPlayers",null);
+        Set<String> alreadyAddedNames = new HashSet<>();
         try {
             if (!marriedPlayerNamesFile.exists() && !marriedPlayerNamesFile.createNewFile())
                 VinUtils.sendDebugMessage(0,"<red>Couldn't save married players file to "+ marriedPlayerNamesFile +"!");
             for (String playerName : marriedPlayerNames.keySet()) {
-                marriedPlayersYaml.set("MarriedPlayers."+playerName,marriedPlayerNames.get(playerName));
+                if (!alreadyAddedNames.contains(playerName) && !alreadyAddedNames.contains(marriedPlayerNames.get(playerName))) {
+                    marriedPlayersYaml.set("MarriedPlayers." + playerName, marriedPlayerNames.get(playerName));
+                    alreadyAddedNames.add(playerName);
+                    alreadyAddedNames.add(marriedPlayerNames.get(playerName));
+                }
             }
             marriedPlayersYaml.save(marriedPlayerNamesFile);
         } catch (IOException e) {

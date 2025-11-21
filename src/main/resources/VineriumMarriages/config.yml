@@ -1,0 +1,19 @@
+Marriages:
+  Language: ru_ru
+  AcceptInviteTime: 2400
+  OfferMaxDistance: 10.0
+  KissMaxDistance: 3
+  KissHealAmount: 8
+  KissCooldown: 1200
+  WoohooMaxDistance: 5
+  WoohooHungerCost: 10
+  WoohooBedNeeded: true
+  WoohooLength: 200
+  WoohooBuffs:
+    - SPEED,0,1200
+    - RESISTANCE,0,2400
+  WoohooCooldown: 6000
+  WoohooSounds:
+    - entity.villager.trade
+    - entity.villager.celebrate
+    - entity.villager.no
