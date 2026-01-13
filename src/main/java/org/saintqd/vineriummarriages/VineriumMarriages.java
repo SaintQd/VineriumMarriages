@@ -1,5 +1,6 @@
 package org.saintqd.vineriummarriages;
 
+import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.saintqd.vineriumlib.VineriumLib;
@@ -64,9 +65,9 @@ public class VineriumMarriages extends JavaPlugin {
         reloadConfig();
 
         String selectedLang = getConfig().getString("Marriages.Language");
-        HashMap<String,String> langLines = VineriumLib.inst().getLangManager().loadLanguageFile(
+        HashMap<Key,String> langLines = VineriumLib.inst().getLangManager().loadLanguageFile(this,
                 plugin.getDataFolder().getPath() + File.separator + "lang" + File.separator + selectedLang + ".yml");
-        VineriumLib.inst().getLangManager().registerLangLines(this,langLines);
+        VineriumLib.inst().getLangManager().registerLangLines(langLines);
 
         long startTime = System.currentTimeMillis();
         long prevTime = startTime;
